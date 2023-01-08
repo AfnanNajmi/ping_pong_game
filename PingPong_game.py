@@ -11,26 +11,27 @@ class GameSprite(sprite.Sprite):
     def reset(self):
         window.blit(self.image,(self.rect.x, self.rect.y))
 
-class Paddle(GameSprite):
+class Paddle (GameSprite):
+    #method to control the sprite with arrow keys
     def update_right(self):
         keys = key.get_pressed()
         if keys[K_UP] and self.rect.y > 5:
             self.rect.y -= self.speed
-        if keys[K_DOWN] and self.rect.y < win_length - 150:
+        if keys[K_DOWN] and self.rect.y < win_height - 150:
             self.rect.y += self.speed
     def update_left(self):
         keys = key.get_pressed()
         if keys[K_w] and self.rect.y > 5:
             self.rect.y -= self.speed
-        if keys[K_s] and self.rect.y < win_length - 150:
+        if keys[K_s] and self.rect.y < win_height - 150:
             self.rect.y += self.speed
         
 
-win_height = 600
-win_length = 500
+win_height = 500
+win_length = 600
 
 BLUE = (173, 216, 230)
-window = display.set_mode((win_height, win_length))
+window = display.set_mode((win_length, win_height))
 display.set_caption("Ping Pong Game")
 window.fill(BLUE)
 
@@ -61,7 +62,7 @@ while run:
             run = False
 
     if finish != True:
-        window.fill(BLUE)
+        window.fill (BLUE)
         paddleLeft.update_left()
         paddleRight.update_right()
 
@@ -72,28 +73,23 @@ while run:
             speed_x *= -1
             speed_y *= 1
 
+        #ball bounces when hit the up or bottom wall
         if ball.rect.y > win_height-50 or ball.rect.y < 0:
             speed_y *= -1
 
+        #if ball flies behind this paddle, display loss condition for player left
         if ball.rect.x < 0:
             finish = False
-            window.blit(lose1, (200,200))
+            window.blit(lose1, (200, 200))
 
+        #if the ball flies behind this paddle, display loss condition for player right
         if ball.rect.x > win_height:
             finish = False
-            window.blit(lose2, (200,200))
-
-
+            window.blit(lose2, (200, 200))
 
         paddleLeft.reset()
         paddleRight.reset()
         ball.reset()
-
-
-    
-        
-    
-
 
     display.update()
     clock.tick(FPS)
